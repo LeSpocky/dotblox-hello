@@ -15,11 +15,12 @@ ISR(TIMER0_OVF_vect) {
 
     for ( i=0; i<8; i++ ) {
         if ( framebuffer[i][curr_col] > 0 ) {
-            data |= 1<<i;
+            data |= 1<<(7-i);
         }
     }
 
     PORTB = 0xFF;
+    _delay_us(2);
     PORTD = data;
     PORTB &= ~(1<<curr_col++);
     curr_col &= 0x07;   /*  7 to 0  */
@@ -54,7 +55,7 @@ void __attribute__ ((noreturn)) main( void ) {
         for ( i=0; i<8; i++ ) {
             for ( j=0; j<8; j++ ) {
                 framebuffer[i][j] ^= 1;
-                _delay_ms(250);
+                _delay_ms(100);
             }
         }
     }
